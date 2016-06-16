@@ -141,6 +141,7 @@ public class Calculator {
         //Remove spaces
         expression = expression.replaceAll("\\s", "");
 
+        //Create subtress
         LinkedListOfString operands = new LinkedListOfString();
         LinkedListOfString operators = new LinkedListOfString();
         LinkedListOfString roots = new LinkedListOfString();
@@ -161,7 +162,7 @@ public class Calculator {
                 tokenMinusOne = String.valueOf(expression.charAt(i - 1));
             }
 
-            System.out.println("token: " + token);
+            //System.out.println("token: " + token);
             if (isOperand(token)) {
                 if (isOperand(tokenPlusOne)) {
                     int c = 1;
@@ -173,16 +174,16 @@ public class Calculator {
                         next = String.valueOf(expression.charAt(i + c));
                     }
                     if (i + c < expression.length()) {
-                        i += c-1;
+                        i += c - 1;
                     }
                 }
                 operands.add(token);
-                System.out.println("token+: " + token);
-                System.out.println("operands.size():" + operands.size());
+                //System.out.println("token+: " + token);
+                //System.out.println("operands.size():" + operands.size());
 
             } else if (isOperator(token)) {
                 if (isOperand(tokenMinusOne) && tokenPlusOne.equals("(")) {
-                    System.out.println("Case 4");
+                    ///System.out.println("Case 4");
                     //Case 4
                     BinaryTreeOfString t = new BinaryTreeOfString();
                     t.addRoot(token);
@@ -205,19 +206,19 @@ public class Calculator {
 
                 } else if (tokenPlusOne.equals("(")) {
                     //Case 2
-                    System.out.println("Root! " + token);
+                    //System.out.println("Root! " + token);
                     BinaryTreeOfString t = new BinaryTreeOfString();
                     t.addRoot(token);
                     subtrees.add(t);
                     roots.add(token);
                 } else {
                     operators.add(token);
-                    System.out.println("operators.size():" + operators.size());
+                    //System.out.println("operators.size():" + operators.size());
                 }
             } else if (token.equals(")")) {
                 if (isOperator(tokenPlusOne) && isOperand(tokenPlusTwo)) {
                     //Case 3
-                    System.out.println("Case 3");
+                    //System.out.println("Case 3");
                     BinaryTreeOfString t = new BinaryTreeOfString();
                     t.addRoot(operators.get(0));
                     t.addLeft(operands.get(0), t.getRoot());
@@ -236,7 +237,7 @@ public class Calculator {
                     }
                 } else if (operands.size() == 2 && operators.size() == 1) {
                     //Case 1
-                    System.out.println("Case 1");
+                    //System.out.println("Case 1");
                     BinaryTreeOfString t = new BinaryTreeOfString();
                     t.addRoot(operators.get(0));
                     t.addLeft(operands.get(0), t.getRoot());
@@ -249,8 +250,37 @@ public class Calculator {
 
         }
 
-        System.out.println("count roots: " + roots.size());
-        System.out.println("count trees: " + subtrees.size());
+        //Uni subtrees
+        int i = 1;
+        while (subtrees.size() > 1) {
+            if (subtrees.size() == 2) {
+                BinaryTreeOfString tree = subtrees.get(i);
+                BinaryTreeOfString subtreeLeft = subtrees.get(i - 1);
+                tree.addSubtreeLeft(subtreeLeft, tree.getRoot());
+
+                if (subtrees.size() > 1) {
+                    subtrees.set(i, tree);
+                } else {
+                    subtrees.set(0, tree);
+                }
+                subtrees.remove(subtreeLeft);
+            } else {
+                BinaryTreeOfString tree = subtrees.get(i);
+                BinaryTreeOfString subtreeLeft = subtrees.get(i - 1);
+                BinaryTreeOfString subtreeRight = subtrees.get(i + 1);
+
+                tree.addSubtreeLeft(subtreeLeft, tree.getRoot());
+                tree.addSubtreeRight(subtreeRight, tree.getRoot());
+
+                if (subtrees.size() > 1) {
+                    subtrees.set(i, tree);
+                } else {
+                    subtrees.set(0, tree);
+                }
+                subtrees.remove(subtreeLeft);
+                subtrees.remove(subtreeRight);
+            }
+        }
         return subtrees;
     }
 
