@@ -18,18 +18,22 @@ public class Main {
      */
     public static void main(String[] args) {
         String exp = "( ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) )";
-        exp = "( ( ( ( 58 + 33 ) - ( ( 108 - 79 ) + 2 ) ) * ( 9 ^ 3 ) ) + ( ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) ) )";
+        //exp = "( ( ( ( 58 + 33 ) - ( ( 108 - 79 ) + 2 ) ) * ( 9 ^ 3 ) ) + ( ( 5 + 12 ) + ( ( 10 - 8 ) + 2 ) ) )";
         Calculator calculator = new Calculator("output.txt", "expressoes.txt");
         //calculator.validateExpression();
         ArrayList<BinaryTreeOfString> trees = calculator.createTree(exp);
-        for (int i = 0; i < trees.size(); i++) {
+        /*for (int i = 0; i < trees.size(); i++) {
             System.out.println("Tree " + i);
             BinaryTreeOfString tree = trees.get(i);
             LinkedListOfString list = tree.positionsPos();
             for (int j = 0; j < list.size(); j++) {
                 System.out.println(list.get(j));
             }
-        }
+        }*/
+        
+        LinkedListOfString list = trees.get(0).positionsPos();
+        double result = calculator.calculateTree(list);
+        System.out.println("Result="+result);
 
         /*
         BinaryTreeOfString t = new BinaryTreeOfString();

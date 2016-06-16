@@ -133,8 +133,6 @@ public class Calculator {
     }
 
     /**
-     * TODO unir as arvores resultantes usando o ultimo elemento o raiz
-     *
      * @param expression
      */
     public ArrayList<BinaryTreeOfString> createTree(String expression) {
@@ -282,6 +280,39 @@ public class Calculator {
             }
         }
         return subtrees;
+    }
+    
+    public double calculateTree(LinkedListOfString subtree){
+        ArrayList<String> list = new ArrayList<String>();
+        
+        for(int i=0; i<subtree.size(); i++){
+            list.add(subtree.get(i));
+        }
+        
+        for(int i=0; i<list.size(); i++){
+            printList(list);
+            System.out.println("---");
+            if(isOperator(list.get(i))){
+                String n1 = list.get(i-2);
+                String n2 = list.get(i-1);
+                String op = list.get(i);
+                System.out.println("op:"+n1+op+n2);
+                
+                String result = this.calculate(n1, op, n2);
+                list.remove(i-1);
+                list.remove(i-2);
+                list.set(i, result);
+                i+=2;
+            }
+        }
+        
+        return Double.parseDouble(list.get(0));
+    }
+    
+    public void printList(ArrayList<String> list){
+        for(int i=0; i<list.size(); i++){
+            System.out.println(list.get(i));
+        }
     }
 
 }
