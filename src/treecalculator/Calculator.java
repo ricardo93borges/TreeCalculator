@@ -80,23 +80,23 @@ public class Calculator {
      * @param op1
      * @return String
      */
-    public String calculate(String op2, String operator, String op1) {
+    public String calculate(Double op1, String operator, Double op2) {
         double result = 0;
         switch (operator) {
             case "+":
-                result = Double.parseDouble(op1) + Double.parseDouble(op2);
+                result = op1 + op2;
                 break;
             case "-":
-                result = Double.parseDouble(op1) - Double.parseDouble(op2);
+                result = op1 - op2;
                 break;
             case "*":
-                result = Double.parseDouble(op1) * Double.parseDouble(op2);
+                result = op1 * op2;
                 break;
             case "/":
-                result = Double.parseDouble(op1) / Double.parseDouble(op2);
+                result = op1 / op2;
                 break;
             case "^":
-                result = Math.pow(Double.parseDouble(op1), Double.parseDouble(op2));
+                result = Math.pow(op1, op2);
                 break;
         }
         return String.valueOf(result);
@@ -112,8 +112,11 @@ public class Calculator {
             String expression = expressions.get(i);
             //Validade
             if (validate(expression)) {
-                this.createTree(expression);
-                System.out.println("OK");
+                System.out.println(expression);
+                BinaryTreeOfString tree = this.createTree(expression);
+                System.out.println("Altura: "+tree.height());
+                Double resultado = this.calculateTree(tree.positionsPos());
+                System.out.println("Resultado:"+resultado);
             } else {
                 System.out.println("FAIL");
                 result = "Expressão inválida";
@@ -135,7 +138,7 @@ public class Calculator {
     /**
      * @param expression
      */
-    public ArrayList<BinaryTreeOfString> createTree(String expression) {
+    public BinaryTreeOfString createTree(String expression) {
         //Remove spaces
         expression = expression.replaceAll("\\s", "");
 
@@ -279,38 +282,58 @@ public class Calculator {
                 subtrees.remove(subtreeRight);
             }
         }
-        return subtrees;
+        return subtrees.get(0);
     }
-    
-    public double calculateTree(LinkedListOfString subtree){
-        ArrayList<String> list = new ArrayList<String>();
-        
-        for(int i=0; i<subtree.size(); i++){
-            list.add(subtree.get(i));
-        }
-        
-        for(int i=0; i<list.size(); i++){
-            printList(list);
-            System.out.println("---");
-            if(isOperator(list.get(i))){
-                String n1 = list.get(i-2);
-                String n2 = list.get(i-1);
-                String op = list.get(i);
-                System.out.println("op:"+n1+op+n2);
+
+    public void calculateTreeAux(ArrayList<String> list) {
+        for (int i = 0; i < list.size(); i++) {
+            //System.out.println("elem:" + list.get(i));
+            if (isOperator(list.get(i))) {
                 
-                String result = this.calculate(n1, op, n2);
-                list.remove(i-1);
-                list.remove(i-2);
+                if (isOperator(list.get(i-1)) || isOperator(list.get(i-2))) {
+                    continue;
+                }
+                /*
+                System.out.println("List:");
+                printList(list);
+                System.out.println("_____");
+                */
+                double n1 = Double.parseDouble(list.get(i - 2));
+                double n2 = Double.parseDouble(list.get(i - 1));
+                String op = list.get(i);
+                String result = "0";
+                if(n1>n2){
+                    System.out.println("op:" + n1 + op + n2);
+                    result = this.calculate(n1, op, n2);
+                }else{
+                    System.out.println("op:" + n2 + op + n1);
+                    result = this.calculate(n2, op, n1);
+                }
+                System.out.println("R:"+result);
+                //System.out.println("Remove " + list.get(i - 1));
+                //System.out.println("Remove " + list.get(i - 2));
                 list.set(i, result);
-                i+=2;
+                list.remove(i - 1);
+                list.remove(i - 2);
+                i += 1;
             }
         }
-        
+        if (list.size() > 1) {
+            calculateTreeAux(list);
+        }
+    }
+
+    public double calculateTree(LinkedListOfString tree) {
+        ArrayList<String> list = new ArrayList<String>();
+        for (int i = 0; i < tree.size(); i++) {
+            list.add(tree.get(i));
+        }
+        calculateTreeAux(list);
         return Double.parseDouble(list.get(0));
     }
-    
-    public void printList(ArrayList<String> list){
-        for(int i=0; i<list.size(); i++){
+
+    public void printList(ArrayList<String> list) {
+        for (int i = 0; i < list.size(); i++) {
             System.out.println(list.get(i));
         }
     }
