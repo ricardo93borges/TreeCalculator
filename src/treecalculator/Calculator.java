@@ -114,6 +114,7 @@ public class Calculator {
         for(int i=0; i<list.size(); i++){
             System.out.print(list.get(i)+",");
         }
+        System.out.println();
     }
     
     public void showPositionsWidth(BinaryTreeOfString tree){
@@ -123,6 +124,7 @@ public class Calculator {
         for(int i=0; i<list.size(); i++){
             System.out.print(list.get(i)+",");
         }
+        System.out.println();
     }
 
     /**
@@ -138,12 +140,14 @@ public class Calculator {
         for (int i = 0; i < expressions.size(); i++) {
             String expression = expressions.get(i);
             //Validade
+            int height = 0;
             if (validate(expression)) {
                 System.out.println(expression);
                 BinaryTreeOfString tree = this.createTree(expression);
                 showPositionsCentral(tree);
                 showPositionsWidth(tree);
-                System.out.println("Altura: "+tree.height());
+                height = tree.height();
+                System.out.println("Altura: "+height);
                 Double resultado = this.calculateTree(tree.positionsPos());
                 System.out.println("Resultado:"+resultado);
             } else {
@@ -154,7 +158,7 @@ public class Calculator {
             try {
                 fh.write(outputFile, expression);
                 fh.write(outputFile, "Resultado: " + result);
-                fh.write(outputFile, "Tamanho máximo da pilha:  " + this.stackSize);
+                fh.write(outputFile, "Altura:  " + this.stackSize);
             } catch (FileNotFoundException e) {
                 System.out.println("FileHandler error: " + e.getMessage());
             } catch (UnsupportedEncodingException e) {
@@ -192,7 +196,6 @@ public class Calculator {
                 tokenMinusOne = String.valueOf(expression.charAt(i - 1));
             }
 
-            //System.out.println("token: " + token);
             if (isOperand(token)) {
                 if (isOperand(tokenPlusOne)) {
                     int c = 1;
@@ -208,12 +211,9 @@ public class Calculator {
                     }
                 }
                 operands.add(token);
-                //System.out.println("token+: " + token);
-                //System.out.println("operands.size():" + operands.size());
 
             } else if (isOperator(token)) {
                 if (isOperand(tokenMinusOne) && tokenPlusOne.equals("(")) {
-                    System.out.println("Case 4");
                     //Case 4
                     BinaryTreeOfString t = new BinaryTreeOfString();
                     t.addRoot(token);
@@ -222,10 +222,6 @@ public class Calculator {
                     String n1 = String.valueOf(expression.charAt(i + 2));
                     String op = String.valueOf(expression.charAt(i + 3));
                     String n2 = String.valueOf(expression.charAt(i + 4));
-                    
-                    System.out.println("n1:"+n1);
-                    System.out.println("op:"+op);
-                    System.out.println("n2:"+n2);
 
                     BinaryTreeOfString t2 = new BinaryTreeOfString();
                     t2.addRoot(op);
@@ -242,19 +238,16 @@ public class Calculator {
 
                 } else if (tokenPlusOne.equals("(")) {
                     //Case 2
-                    //System.out.println("Root! " + token);
                     BinaryTreeOfString t = new BinaryTreeOfString();
                     t.addRoot(token);
                     subtrees.add(t);
                     roots.add(token);
                 } else {
                     operators.add(token);
-                    //System.out.println("operators.size():" + operators.size());
                 }
             } else if (token.equals(")")) {
                 if (isOperator(tokenPlusOne) && isOperand(tokenPlusTwo)) {
                     //Case 3
-                    //System.out.println("Case 3");
                     BinaryTreeOfString t = new BinaryTreeOfString();
                     t.addRoot(operators.get(0));
                     t.addLeft(operands.get(0), t.getRoot());
@@ -273,7 +266,6 @@ public class Calculator {
                     }
                 } else if (operands.size() == 2 && operators.size() == 1) {
                     //Case 1
-                    //System.out.println("Case 1");
                     BinaryTreeOfString t = new BinaryTreeOfString();
                     t.addRoot(operators.get(0));
                     t.addLeft(operands.get(0), t.getRoot());
