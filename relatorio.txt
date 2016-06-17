@@ -1,0 +1,29 @@
+1-Ler arquivo que contém as expressões uma linha por vez
+2-Validar a quantidade parenteses, informar expressão inválida ou continuar
+3-Remover espaços
+4-Iterar os elementos da expressão considerando 4 casos:
+.
+.
+.
+.
+5-Para o caso 1:
+...
+6-Para o caso 2:
+...
+7-Para o caso 3:
+...
+8-Para o caso 4:
+...
+9-Unir subarvores geradas pelos operadores
+10-Unir o restatante das subarvores
+11-Usar a lista gerada pelo caminhamento pós-fixado para calcular a expressão
+12-Enquanto percorre a lista é realizado um calculo sempre que for encontrado um operador na lista usando os 2 elementos anteriores com operandos, isto é feito recursivamente
+até que a lista tenha somente um elemento.
+13-Salvar em um arquivo a expressão, altura da arvore gerada, o caminhamento cetral e em largura, o resultado.
+
+Pseudocodigo do armazenamento da expressão na árvore
+...
+
+Pseudocodigo do processamento da árvore
+...
+
