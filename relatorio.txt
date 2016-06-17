@@ -2,18 +2,26 @@
 2-Validar a quantidade parenteses, informar expressão inválida ou continuar
 3-Remover espaços
 4-Iterar os elementos da expressão considerando 4 casos:
-.
-.
-.
-.
+
+Caso 1 = ( x + y )
+Caso 2 = +
+Caso 3 =  ( x - y ) / z
+Caso 4 =  z / ( x - y )
+
 5-Para o caso 1:
-...
+Criar uma subarvore contendo o operador como raiz e os operandos como filhos desta raiz
+
 6-Para o caso 2:
-...
+Criar um subarvore apenas com o operador com raiz
+
 7-Para o caso 3:
-...
+Criar uma subarvore contendo o operador (-) como raiz e os operandos x e y como filhos desta raiz
+Criar uma subarvore contendo o operador (/) como raiz e o operando z como filho desta raiz
+Unir as 2 subarvores
+
 8-Para o caso 4:
-...
+Mesmo processo do caso 3, porém alterando a ordem do elementos
+
 9-Unir subarvores geradas pelos operadores
 10-Unir o restatante das subarvores
 11-Usar a lista gerada pelo caminhamento pós-fixado para calcular a expressão
