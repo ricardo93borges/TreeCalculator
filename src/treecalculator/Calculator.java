@@ -21,6 +21,11 @@ public class Calculator {
     String outputFile;
     String inputFile;
 
+    /**
+     * 
+     * @param outputFile
+     * @param inputFile 
+     */
     public Calculator(String outputFile, String inputFile) {
         this.inputFile = inputFile;
         this.outputFile = outputFile;
@@ -32,7 +37,7 @@ public class Calculator {
     }
 
     /**
-     *
+     * Verificar se a quantidade de parenteses está correta
      * @param expression
      * @return
      */
@@ -51,7 +56,7 @@ public class Calculator {
     }
 
     /**
-     *
+     * Verifica se é um operador
      * @param str
      * @return boolean
      */
@@ -60,7 +65,7 @@ public class Calculator {
     }
 
     /**
-     *
+     * Verifica se é um operando
      * @param str
      * @return boolean
      */
@@ -74,11 +79,11 @@ public class Calculator {
     }
 
     /**
-     *
-     * @param op2
-     * @param operator
+     * Calcula de acordo com o operador
      * @param op1
-     * @return String
+     * @param operator
+     * @param op2
+     * @return 
      */
     public String calculate(Double op1, String operator, Double op2) {
         double result = 0;
@@ -102,6 +107,10 @@ public class Calculator {
         return String.valueOf(result);
     }
 
+    /**
+     * Valida expressoes de um arquivo, cria um arvore, 
+     * informa a altura e salva o resultado em um arquivo
+     */
     public void validateExpression() {
         FileHandler reader = new FileHandler();
 
@@ -118,7 +127,6 @@ public class Calculator {
                 Double resultado = this.calculateTree(tree.positionsPos());
                 System.out.println("Resultado:"+resultado);
             } else {
-                System.out.println("FAIL");
                 result = "Expressão inválida";
             }
 
@@ -136,6 +144,7 @@ public class Calculator {
     }
 
     /**
+     * Cria uma arvore a partir de uma expressao
      * @param expression
      */
     public BinaryTreeOfString createTree(String expression) {
@@ -184,7 +193,7 @@ public class Calculator {
 
             } else if (isOperator(token)) {
                 if (isOperand(tokenMinusOne) && tokenPlusOne.equals("(")) {
-                    ///System.out.println("Case 4");
+                    System.out.println("Case 4");
                     //Case 4
                     BinaryTreeOfString t = new BinaryTreeOfString();
                     t.addRoot(token);
@@ -193,11 +202,17 @@ public class Calculator {
                     String n1 = String.valueOf(expression.charAt(i + 2));
                     String op = String.valueOf(expression.charAt(i + 3));
                     String n2 = String.valueOf(expression.charAt(i + 4));
+                    
+                    System.out.println("n1:"+n1);
+                    System.out.println("op:"+op);
+                    System.out.println("n2:"+n2);
 
                     BinaryTreeOfString t2 = new BinaryTreeOfString();
                     t2.addRoot(op);
-                    t2.addLeft(n1, t.getRoot());
-                    t2.addRight(n2, t.getRoot());
+                    t2.addLeft(n1, t2.getRoot());
+                    t2.addRight(n2, t2.getRoot());
+                    
+                    //subtrees.add(t2);
 
                     t.addSubtreeRight(t2, t.getRoot());
                     if (i + 5 < expression.length()) {
@@ -285,33 +300,25 @@ public class Calculator {
         return subtrees.get(0);
     }
 
+    /**
+     * Calcula a arvore recursivamente
+     * @param list 
+     */
     public void calculateTreeAux(ArrayList<String> list) {
         for (int i = 0; i < list.size(); i++) {
-            //System.out.println("elem:" + list.get(i));
             if (isOperator(list.get(i))) {
-                
                 if (isOperator(list.get(i-1)) || isOperator(list.get(i-2))) {
                     continue;
                 }
-                /*
-                System.out.println("List:");
-                printList(list);
-                System.out.println("_____");
-                */
                 double n1 = Double.parseDouble(list.get(i - 2));
                 double n2 = Double.parseDouble(list.get(i - 1));
                 String op = list.get(i);
                 String result = "0";
                 if(n1>n2){
-                    System.out.println("op:" + n1 + op + n2);
                     result = this.calculate(n1, op, n2);
                 }else{
-                    System.out.println("op:" + n2 + op + n1);
                     result = this.calculate(n2, op, n1);
                 }
-                System.out.println("R:"+result);
-                //System.out.println("Remove " + list.get(i - 1));
-                //System.out.println("Remove " + list.get(i - 2));
                 list.set(i, result);
                 list.remove(i - 1);
                 list.remove(i - 2);
@@ -323,6 +330,11 @@ public class Calculator {
         }
     }
 
+    /**
+     * Calcula arvore
+     * @param tree
+     * @return 
+     */
     public double calculateTree(LinkedListOfString tree) {
         ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < tree.size(); i++) {
@@ -331,11 +343,4 @@ public class Calculator {
         calculateTreeAux(list);
         return Double.parseDouble(list.get(0));
     }
-
-    public void printList(ArrayList<String> list) {
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i));
-        }
-    }
-
 }
