@@ -106,9 +106,27 @@ public class Calculator {
         }
         return String.valueOf(result);
     }
+    
+    public void showPositionsCentral(BinaryTreeOfString tree){
+        System.out.println();
+        System.out.println("Caminhamento central:");
+        LinkedListOfString list = tree.positionsCentral();
+        for(int i=0; i<list.size(); i++){
+            System.out.print(list.get(i)+",");
+        }
+    }
+    
+    public void showPositionsWidth(BinaryTreeOfString tree){
+        System.out.println();
+        System.out.println("Caminhamento em largura:");
+        LinkedListOfString list = tree.positionsWidth();
+        for(int i=0; i<list.size(); i++){
+            System.out.print(list.get(i)+",");
+        }
+    }
 
     /**
-     * Valida expressoes de um arquivo, cria um arvore, 
+     * Valida expressoes de um arquivo, cria uma arvore, 
      * informa a altura e salva o resultado em um arquivo
      */
     public void validateExpression() {
@@ -123,6 +141,8 @@ public class Calculator {
             if (validate(expression)) {
                 System.out.println(expression);
                 BinaryTreeOfString tree = this.createTree(expression);
+                showPositionsCentral(tree);
+                showPositionsWidth(tree);
                 System.out.println("Altura: "+tree.height());
                 Double resultado = this.calculateTree(tree.positionsPos());
                 System.out.println("Resultado:"+resultado);
